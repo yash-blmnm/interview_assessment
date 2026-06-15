@@ -24,8 +24,8 @@ const establishments = [
 
 function maxProfit(establishments, timeLimit) {
     const { profit, solutions } = maxProfitEstablishments(establishments, timeLimit, []);
-    console.log('Earnings: ', profit);
-    console.log('Solutions:');
+    console.log(`Earnings: \$${profit}`);
+    console.log('Solutions');
     if(profit === 0) {
         console.log('No establishments can be profitably built within the given time limit.');
         return;
@@ -61,16 +61,12 @@ function maxProfitEstablishments(establishments, timeLimit, solutions) {
     return { profit: totalProfit, solutions };
 }
 
-maxProfit(establishments, 1);
 
-maxProfit(establishments, 4);
+const testCases = [1,4,7,8,13,30]
 
-maxProfit(establishments, 7);
-
-maxProfit(establishments, 8);
-
-maxProfit(establishments, 13);
-
-maxProfit(establishments, 30)
-
+testCases.map((time, index) => {
+    console.log(`Test case ${index+1}`);
+    console.log(`Time Unit: ${time}`);
+    maxProfit(establishments, time);
+})
 

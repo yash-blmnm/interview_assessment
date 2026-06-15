@@ -29,20 +29,21 @@ function getRightMaxIndex(heights, right, left) {
 }
 
 
-const waterTankVolume = computeWaterStored([0,4,0,0,0,6,0,6,4,0]);
-console.log(`1. Output: ${waterTankVolume} Units`); // Expected: 18
+const testCaseInputs =[
+    [0,4,0,0,0,6,0,6,4,0], //Expected 18
+    [], // Expected 0
+    [0], // Expected 0
+    [4,4,4,4], // Expected 0
+    [2,1,2], // Expected 1
+    [5, 0, 0, 0, 5], // Expected 15
+    [5, 1, 2, 1, 5], // Expected 11
+    [3, 0, 2, 0, 4], // Expected 7
+    [4, 2, 0, 3, 2, 5], // Expected 9
+    [0, 1, 0, 2, 1, 0, 1, 3, 2, 1, 2, 1] // Expected 6
+]
 
-const waterTankVolume1 = computeWaterStored([5, 0, 0, 0, 5]);
-console.log(`2. Output: ${waterTankVolume1} Units`); // Expected: 15
-
-const waterTankVolume2 = computeWaterStored([5, 1, 2, 1, 5]);
-console.log(`3. Output: ${waterTankVolume2} Units`); // Expected: 11
-
-const waterTankVolume3 = computeWaterStored([3, 0, 2, 0, 4]);
-console.log(`4. Output: ${waterTankVolume3} Units`); // Expected: 7
-
-const waterTankVolume4 = computeWaterStored([4, 2, 0, 3, 2, 5]);
-console.log(`5. Output: ${waterTankVolume4} Units`); // Expected: 9
-
-const waterTankVolume5 = computeWaterStored([0, 1, 0, 2, 1, 0, 1, 3, 2, 1, 2, 1]);
-console.log(`6. Output: ${waterTankVolume5} Units`); // Expected: 6
+testCaseInputs.map((heights, index) => {
+    console.log(`Test Case ${index+1}`)
+    console.log(`Input : [${heights}]`)
+    console.log(`Output : ${computeWaterStored(heights)} Units`);
+})
