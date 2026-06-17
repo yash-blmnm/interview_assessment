@@ -25,14 +25,27 @@ body {
 }
 
 .water-tank {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-evenly;
     width: 80%;
     /* border: 1px solid #333; */
     border-collapse: collapse;
 }
 
+.water-tank-column {
+    display: flex;
+    flex-direction: column-reverse;
+    width: 100%;
+}
+
 .water-tank-cell {
     height: 10px;
     border: 1px solid #333;
+}
+
+.water-tank-cell.water {
+    background-color: aqua;
 }
 
 .water-tank-cell.block {
