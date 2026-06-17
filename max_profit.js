@@ -63,7 +63,7 @@ function maxProfitEstablishments(timeLimit) {
 }
 
 
-const testCases = [1,4,7,8,13,30]
+const testCases = [1,4,7,8,13,14,30]
 
 testCases.map((time, index) => {
     console.log(`Test case ${index+1}`);
