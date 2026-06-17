@@ -47,3 +47,35 @@ testCaseInputs.map((heights, index) => {
     console.log(`Input : [${heights}]`)
     console.log(`Output : ${computeWaterStored(heights)} Units`);
 })
+
+
+document.addEventListener('DOMContentLoaded', () => {
+    console.log('Document ready');
+    drawWaterTank();
+});
+
+function drawWaterTank() {
+    const container = document.getElementById('water-tank');
+    container.innerHTML = '<h2>Tank Loaded</h2>';
+    const waterTankInput = [0,4,0,0,0,6,0,6,4,0];
+    const waterTankInputCopy = [...waterTankInput]
+    const maxHeight = Math.max(...waterTankInput);
+    const maxWidth = waterTankInput.length;
+    let tableContent = '<tbody>'
+    for(let i = 0; i < maxHeight; i++){
+        tableContent += '<tr>'
+        for(let j = 0; j < maxWidth; j++){
+            let className = "water-tank-cell"
+            if(waterTankInputCopy[j] > 0 && waterTankInputCopy[j] === (maxHeight-i)){
+                className = `${className} block`;
+                waterTankInputCopy[j] -= 1;
+            }
+            tableContent += `<td class="${className}"></td>`
+
+        }
+        tableContent += '</tr>'
+    }
+    tableContent += '</tbody>';
+    console.log(tableContent)
+    container.innerHTML = tableContent;
+}
