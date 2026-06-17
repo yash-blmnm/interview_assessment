@@ -22,8 +22,8 @@ const establishments = [
   }
 ]
 
-function maxProfit(establishments, timeLimit) {
-    const { profit, solutions } = maxProfitEstablishments(establishments, timeLimit, []);
+function maxProfit(timeLimit) {
+    const { profit, solutions } = maxProfitEstablishments(timeLimit);
     console.log(`Earnings: \$${profit}`);
     console.log('Solutions');
     if(profit === 0) {
@@ -32,29 +32,30 @@ function maxProfit(establishments, timeLimit) {
     }
     solutions.map(solution => {
         console.log(establishments.reduce((acc, establishment) => {
-            return acc + `${establishment.id} : ${solution.filter(value => value === establishment.id).length || 0}` + '\t'
+            return acc + `${establishment.id} : ${solution.filter(value => value === establishment.id).length || 0} `
         }, '').trim())
     })
+
+    console.table()
 }
 
 
-function maxProfitEstablishments(establishments, timeLimit, solutions) {
-    let remainingTime = timeLimit;
+function maxProfitEstablishments(timeLimit) {
     let totalProfit = 0;
+    let solutions = []
     for(let i = 0; i < establishments.length; i++) {
         const establishment = establishments[i];
-        if(remainingTime >= establishment.timeToBuild) {
-            const profit = (remainingTime - establishment.timeToBuild) * establishment.earning;
+        if(timeLimit >= establishment.timeToBuild) {
+            const profit = (timeLimit - establishment.timeToBuild) * establishment.earning;
             const {profit: remainingProfit, solutions: modifiedSolutions} 
-                = remainingTime > 0 ? maxProfitEstablishments(establishments, remainingTime - establishment.timeToBuild, []) : 0;
+                = timeLimit > 0 ? maxProfitEstablishments(timeLimit - establishment.timeToBuild) : {profit: 0, solutions: [[]]};
             const totalEstablishmentProfit = profit + remainingProfit;
+            let updatedSolution = modifiedSolutions.length ? modifiedSolutions.map(solution => [establishment.id, ...solution]) : [[establishment.id]]
             if(totalEstablishmentProfit > totalProfit) {
                 totalProfit = totalEstablishmentProfit;
-                const updatedSolution = modifiedSolutions.length ? modifiedSolutions.map(solution => [establishment.id, ...solution]) :[ [establishment.id]];
                 solutions = updatedSolution;
             }else if(totalEstablishmentProfit === totalProfit) {
-                const updatedSolution = modifiedSolutions.length ? modifiedSolutions.map(solution => [establishment.id, ...solution]) : [establishment.id];
-                solutions.push(updatedSolution)
+                solutions.push(...updatedSolution)
             }
         }
     }
@@ -67,6 +68,5 @@ const testCases = [1,4,7,8,13,30]
 testCases.map((time, index) => {
     console.log(`Test case ${index+1}`);
     console.log(`Time Unit: ${time}`);
-    maxProfit(establishments, time);
+    maxProfit(time);
 })
-
