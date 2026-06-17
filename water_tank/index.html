@@ -20,12 +20,19 @@
     <div class="test-case-container">
         <div class="input-container">
             <label>Input</label>
-            <textarea id="input"></textarea>
-            <button>Run</button>
+            <div class="input-field">
+                <textarea id="input"></textarea>
+                <p id="error-message"></p>
+            </div>
+            <div class="input-field">
+                <button id="run-btn">Run</button>
+                <button id="reset-btn">Reset</button>
+            </div>
+            
         </div>
         <div class="output-container">
-            <p>Output: </p>
-            <p id="output"></p>
+            <p>Output: <span id="output"></span></p>
+            
         </div>
     </div>
 </body>

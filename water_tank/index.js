@@ -50,27 +50,98 @@
 
 
 document.addEventListener('DOMContentLoaded', () => {
-    console.log('Document ready');
-    drawWaterTank();
+    const input = document.getElementById('input');
+    if(!input.value.length) {
+        input.value = "0,4,0,0,0,6,0,6,4,0"
+    }
+    const runButton = document.getElementById('run-btn');
+    const resetButton = document.getElementById('reset-btn');
+    const errorMessage = document.getElementById('error-message');
+
+    input.addEventListener('input', handleInputChange);
+    runButton.addEventListener('click', handleRun);
+    resetButton.addEventListener('click', handleReset);
+    
+    function handleInputChange() {
+        validateInput(input.value);
+    }
+
+    function handleRun() {
+        const isValid = validateInput(input.value);
+
+        if (!isValid) {
+            return;
+        }
+
+        const heights = parseInput(input.value);
+        console.log(heights)
+        drawWaterTank(heights);
+    }
+
+    function handleReset() {
+        input.value = "0,4,0,0,0,6,0,6,4,0"
+        handleRun()
+    }
+
+    function validateInput(value) {
+        const trimmedValue = value.trim();
+
+        if (!trimmedValue) {
+            errorMessage.textContent = 'Input is required';
+            return false;
+        }
+
+        try {
+            const heights = parseInput(trimmedValue);
+
+            if (heights.some(height => height < 0)) {
+                errorMessage.textContent = 'Heights cannot be negative';
+                return false;
+            }
+
+            errorMessage.textContent = '';
+            return true;
+        } catch {
+            errorMessage.textContent =
+                'Please enter comma separated numbers (e.g. 0,4,0,0,6)';
+            return false;
+        }
+    }
+
+    function parseInput(value) {
+        return value
+            .split(',')
+            .map(item => {
+                const num = Number(item.trim());
+
+                if (Number.isNaN(num)) {
+                    throw new Error('Invalid number');
+                }
+
+                return num;
+            });
+    }
+
+    if(input.value) {
+        handleRun()
+    }
 });
 
-function drawWaterTank() {
+function drawWaterTank(heights) {
     const container = document.getElementById('water-tank');
     const outputContainer = document.getElementById('output');
-    const waterTankInput = [0,4,0,0,0,6,0,6,4,0];
-    const [totalVolume, waterLevels] = computeWaterLevel(waterTankInput);
-    // const waterTankInputCopy = [...waterTankInput]
-    const maxHeight = Math.max(...waterTankInput);
-    const maxWidth = waterTankInput.length;
+    const [totalVolume, waterLevels] = computeWaterLevel(heights);
+    const maxHeight = Math.max(...heights);
+    const maxWidth = heights.length;
     let tableContent = '';
     for(let i = 0; i < maxWidth; i++) {
         tableContent += '<div class="water-tank-column">'
-        for(let j = 0; j < maxHeight; j++) {
+        for(let j = 0; j < (maxHeight + 2); j++) {
             let className = 'water-tank-cell';
-            if(j - (waterLevels[i] + waterTankInput[i]) < 0){
+            if(j - (waterLevels[i] + heights[i]) < 0){
                 className = `${className} water`
             }
-            if(j - waterTankInput[i] < 0){
+            if(j - heights[i] < 0){
                 className = `${className} block`
             }
             tableContent += `<div class="${className}"></div>`

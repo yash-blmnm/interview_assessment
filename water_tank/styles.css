@@ -64,8 +64,19 @@ body {
 
 .input-container {
     display: flex;
-    align-items: center;
+    align-items: flex-start;
     gap: 1rem;
+}
+
+.input-field {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.error-message {
+    padding: 0;
+    color:  rgb(219, 50, 50);
 }
 
 .output-container {
