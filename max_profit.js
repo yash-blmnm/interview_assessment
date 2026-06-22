@@ -47,8 +47,11 @@ function maxProfitEstablishments(timeLimit) {
         const establishment = establishments[i];
         if(timeLimit >= establishment.timeToBuild) {
             const profit = (timeLimit - establishment.timeToBuild) * establishment.earning;
+            if(profit === 0) {
+              continue;
+            }
             const {profit: remainingProfit, solutions: modifiedSolutions} 
-                = timeLimit > 0 ? maxProfitEstablishments(timeLimit - establishment.timeToBuild) : {profit: 0, solutions: [[]]};
+                = maxProfitEstablishments(timeLimit - establishment.timeToBuild);
             const totalEstablishmentProfit = profit + remainingProfit;
             let updatedSolution = modifiedSolutions.length ? modifiedSolutions.map(solution => [establishment.id, ...solution]) : [[establishment.id]]
             if(totalEstablishmentProfit > totalProfit) {
@@ -62,8 +65,7 @@ function maxProfitEstablishments(timeLimit) {
     return { profit: totalProfit, solutions };
 }
 
-
-const testCases = [7,8,13,1,4,14,15,30]
+const testCases = [7,8,13,49,5,1,4,14,18]
 
 testCases.map((time, index) => {
     console.log(`Test case ${index+1}`);
