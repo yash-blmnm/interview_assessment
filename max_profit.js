@@ -42,14 +42,15 @@ function maxProfit(timeLimit) {
 
 function maxProfitEstablishments(timeLimit) {
     let totalProfit = 0;
-    let solutions = []
+    let solutions = [[]]
     for(let i = 0; i < establishments.length; i++) {
         const establishment = establishments[i];
         if(timeLimit >= establishment.timeToBuild) {
             const profit = (timeLimit - establishment.timeToBuild) * establishment.earning;
-            if(profit === 0) {
-              continue;
-            }
+            // if(profit === 0) {
+            // //   return { profit: 0, solutions: [[], [establishment.id]] }
+            // // solutions.push()
+            // }
             const {profit: remainingProfit, solutions: modifiedSolutions} 
                 = maxProfitEstablishments(timeLimit - establishment.timeToBuild);
             const totalEstablishmentProfit = profit + remainingProfit;
