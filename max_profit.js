@@ -35,8 +35,6 @@ function maxProfit(timeLimit) {
             return acc + `${establishment.id} : ${solution.filter(value => value === establishment.id).length || 0} `
         }, '').trim())
     })
-
-    console.table()
 }
 
 
@@ -47,10 +45,6 @@ function maxProfitEstablishments(timeLimit) {
         const establishment = establishments[i];
         if(timeLimit >= establishment.timeToBuild) {
             const profit = (timeLimit - establishment.timeToBuild) * establishment.earning;
-            // if(profit === 0) {
-            // //   return { profit: 0, solutions: [[], [establishment.id]] }
-            // // solutions.push()
-            // }
             const {profit: remainingProfit, solutions: modifiedSolutions} 
                 = maxProfitEstablishments(timeLimit - establishment.timeToBuild);
             const totalEstablishmentProfit = profit + remainingProfit;
