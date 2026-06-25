@@ -38,7 +38,10 @@ function maxProfit(timeLimit) {
 }
 
 
-function maxProfitEstablishments(timeLimit) {
+function maxProfitEstablishments(timeLimit, memo = new Map()) {
+    if(memo.has(timeLimit)) {
+        return memo.get(timeLimit);
+    }
     let totalProfit = 0;
     let solutions = [[]]
     for(let i = 0; i < establishments.length; i++) {
@@ -46,7 +49,7 @@ function maxProfitEstablishments(timeLimit) {
         if(timeLimit >= establishment.timeToBuild) {
             const profit = (timeLimit - establishment.timeToBuild) * establishment.earning;
             const {profit: remainingProfit, solutions: modifiedSolutions} 
-                = maxProfitEstablishments(timeLimit - establishment.timeToBuild);
+                = maxProfitEstablishments(timeLimit - establishment.timeToBuild, memo);
             const totalEstablishmentProfit = profit + remainingProfit;
             let updatedSolution = modifiedSolutions.length ? modifiedSolutions.map(solution => [establishment.id, ...solution]) : [[establishment.id]]
             if(totalEstablishmentProfit > totalProfit) {
@@ -57,7 +60,9 @@ function maxProfitEstablishments(timeLimit) {
             }
         }
     }
-    return { profit: totalProfit, solutions };
+    const result  = { profit: totalProfit, solutions }
+    memo.set(timeLimit, result);
+    return result;
 }
 
 const testCases = [7,8,13,49,5,1,4,14,18]
