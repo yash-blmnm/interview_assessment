@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import Checkbox from "./Checkbox";
 
 function applyStatusToTree(items, status) {
@@ -9,43 +9,49 @@ function applyStatusToTree(items, status) {
   }));
 }
 
-export default function NestedCheckbox({ data, parentStatus }) {
-  const [ checkboxList, setCheckboxList ] = useState(data);
+function updateTreeStatus(items, targetId, status) {
+  return items.map((item) => {
+    if (item.id === targetId) {
+      return {
+        ...item,
+        status,
+        children: item.children ? applyStatusToTree(item.children, status) : item.children,
+      };
+    }
+    if (item.children) {
+      return { ...item, children: updateTreeStatus(item.children, targetId, status) };
+    }
+    return item;
+  });
+}
+
+export default function NestedCheckbox({ data }) {
+  const [checkboxList, setCheckboxList] = useState(data);
 
   const updateDependingStatus = (id, status) => {
-    // const checkedItem = checkboxList.find(item => item.id === id);
-    
-    setCheckboxList([...checkboxList.map(item => {
-        if(item.id === id) {
-            return {
-                ...item, 
-                children: item.children ? applyStatusToTree(item.children, status) : item.children,
-                status
-            }
-        } 
-        return item;
-    })])
-  }
-
-  useEffect(() => {
-    if(parentStatus !== undefined && [true, false].includes(parentStatus)) {
-        setCheckboxList(data);
-    }
-  }, [parentStatus])
-
-  console.log(checkboxList)
+    setCheckboxList((prev) => updateTreeStatus(prev, id, status));
+  };
 
   return (
+    <NestedCheckboxComponent data={checkboxList} updateDependingStatus={updateDependingStatus} />
+  );
+}
+
+function NestedCheckboxComponent({ data, updateDependingStatus }) {
+  return (
     <div>
-        {checkboxList.map((checkboxItem) => {
-            const {id, label, status, children } = checkboxItem;
-            return (
-                <div key={id} style={{paddingLeft: '0.5rem'}}>
-                    <Checkbox label={label} checked={status} onCheckboxClicked={(s) => updateDependingStatus(id, s)}/>
-                    {children ? <NestedCheckbox data={children} parentStatus={status} /> : ''}
-                </div>
-            )
-        })}
+      {data.map((checkboxItem) => {
+        const { id, label, status, children } = checkboxItem;
+        return (
+          <div key={id} style={{ paddingLeft: "0.5rem" }}>
+            <Checkbox label={label} checked={status} onCheckboxClicked={(s) => updateDependingStatus(id, s)}
+            />
+            {children ? (
+              <NestedCheckboxComponent data={children} updateDependingStatus={updateDependingStatus} />
+            ) : ''}
+          </div>
+        );
+      })}
     </div>
   );
 }

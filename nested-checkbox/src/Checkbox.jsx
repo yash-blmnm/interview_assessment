@@ -4,7 +4,6 @@ export default function Checkbox ({label, checked, onCheckboxClicked}) {
         const updatedStatus = e.target.checked;
         onCheckboxClicked(updatedStatus)
     }
-    console.log(label, checked)
 
     return (
         <div>
