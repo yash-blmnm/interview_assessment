@@ -9,6 +9,10 @@ function applyStatusToTree(items, status) {
   }));
 }
 
+function calculateParentStatus(items) {
+  return items.every((item) => item.status === true);
+}
+
 function updateTreeStatus(items, targetId, status) {
   return items.map((item) => {
     if (item.id === targetId) {
@@ -19,7 +23,12 @@ function updateTreeStatus(items, targetId, status) {
       };
     }
     if (item.children) {
-      return { ...item, children: updateTreeStatus(item.children, targetId, status) };
+      const updatedChildren = updateTreeStatus(item.children, targetId, status);
+      return {
+        ...item,
+        children: updatedChildren,
+        status: calculateParentStatus(updatedChildren),
+      };
     }
     return item;
   });
